@@ -30,6 +30,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     // 	return new Response("Unauthorized", {status: 401})
     // }
     const body = await context.request.json<User>();
+    body.id = crypto.randomUUID();
     body.active_ts = Math.floor(Date.now() / 1000);
     if (body.expired_ts < 3600) {
         body.expired_ts = Math.floor(Date.now() / 1000) + 3600 * 24 * 30;
