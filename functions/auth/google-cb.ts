@@ -38,19 +38,21 @@ export const onRequestGet: PagesFunction<Env> = async ({request, env}) => {
         picture: string,
         sub: string
     } = await userInfoResponse.json();
-
-    const user = await env.DB.prepare("SELECT * FROM users WHERE email = ?").bind(userInfo.email).first<User>();
+    const userEmail = userInfo.email||"";
+    if (!userEmail) {
+        console.error("email not found");
+        console.error(userInfo);
+        return new Response("email not found", {status: 400});
+    }
+    const user = await env.DB.prepare("SELECT * FROM users WHERE email = ?").bind(userEmail).first<User>();
     if (!user) {
-        const uuid = crypto.randomUUID();
-        const kb = 1024 * 1024 * 5;
-        const expired_ts = Math.floor(Date.now() / 1000) + 3600 * 24 * 90;
-        const active_ts = Math.floor(Date.now() / 1000);
-        user.email = userInfo.email;
-        user.available_kb = kb;
-        user.expired_ts = expired_ts;
-        user.active_ts = active_ts;
+        user.id = crypto.randomUUID();
+        user.email = userEmail||"";
+        user.available_kb = 1024 * 1024 * 5;
+        user.expired_ts = Math.floor(Date.now() / 1000) + 3600 * 24 * 90;
+        user.active_ts = Math.floor(Date.now() / 1000);
         const q = "INSERT INTO users (id,email, available_kb, expired_ts, active_ts) VALUES (?, ?, ?, ?, ?)"
-        await env.DB.prepare(q).bind(uuid, userInfo.email, kb, expired_ts, active_ts).run();
+        await env.DB.prepare(q).bind(user.id, user.email, user.expired_ts, user.expired_ts, user.active_ts).run();
     }
     //write cookie
     const cookieValue = `uuid=${user.id}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`;
