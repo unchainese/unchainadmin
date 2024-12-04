@@ -28,11 +28,8 @@ export default {
   },
   methods: {
     handleGoogleLogin() {
-      const host = window.location.origin;
-      window.location.href = "//"+host+'/auth/google';
+      window.location.href = `${window.location.protocol}://${window.location.host}/auth/google`;
     },
-  },
-  mounted() {
   },
 };
 </script>
