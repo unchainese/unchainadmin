@@ -15,14 +15,11 @@
       <el-form-item label="Email">
         <el-input v-model.trim="user.email" type="email" clearable></el-input>
       </el-form-item>
-      <el-form-item label="PASSWORD">
-        <el-input v-model.trim="user.password" clearable></el-input>
-      </el-form-item>
       <el-form-item label="AvailableKB">
         <el-input-number v-model="user.available_kb" :step="1024*1024"></el-input-number>
         <el-tag v-text="availableGB" style="margin-left: 2rem"></el-tag>
       </el-form-item>
-      <el-form-item label="expired_ts">
+      <el-form-item label="expire_ts">
         <el-date-picker
             v-model="user.expired"
             align="right"
@@ -117,10 +114,9 @@ export default {
       user: {
         id: '',
         email: '',
-        password: '',
         available_kb: 1024 * 1024 * 5,
         expired: new Date(),
-        expired_ts: 0,
+        expire_ts: 0,
         sub_txt: '',
       },
     };
@@ -144,11 +140,11 @@ export default {
           id: generateUUID(),
           available_kb: 1024 * 1024 * 5,
           expired: now,
-          expired_ts: now.getTime() / 1000
+          expire_ts: now.getTime() / 1000
         }
       } else if (this.mode === 'update') {
         this.user = this.obj
-        this.user.expired = this.ts2Date(this.obj.expired_ts);
+        this.user.expired = this.ts2Date(this.obj.expire_ts);
       } else if (this.mode === 'view') {
         this.user = this.obj
         await this.fetchUseSub()
@@ -176,7 +172,7 @@ export default {
         },
       }).then(resp => resp.json()).then(user => {
         this.user = user
-        this.user.expired = this.ts2Date(user.expired_ts);
+        this.user.expired = this.ts2Date(user.expire_ts);
       }).catch(e => {
         this.$message.error(e.message)
       })
@@ -184,7 +180,7 @@ export default {
     userCreate() {
       const token = this.$store.getters.getToken;
       const body = this.user;
-      body.expired_ts = body.expired.getTime() / 1000
+      body.expire_ts = body.expired.getTime() / 1000
 
       fetch('/api/users', {
         method: 'POST',
@@ -203,7 +199,7 @@ export default {
     userUpdate() {
       const token = this.$store.getters.getToken;
       const body = this.user;
-      body.expired_ts = body.expired.getTime() / 1000
+      body.expire_ts = body.expired.getTime() / 1000
       fetch('/api/users', {
         method: 'PATCH',
         headers: {

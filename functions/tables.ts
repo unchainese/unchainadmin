@@ -1,10 +1,10 @@
 export interface User {
     id: string
     email: string
-    password: string
     available_kb: number
-    expired_ts: number,
+    expire_ts: number,
     active_ts: number,
+    role: string,//admin,'' for normal user
     sub_txt: string,//not a column in db, just for vless URL
 }
 

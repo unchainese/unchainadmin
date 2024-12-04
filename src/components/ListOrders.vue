@@ -49,9 +49,9 @@
           <span v-text="shortTime(scope.row.active_ts)"></span>
         </template>
       </el-table-column>
-      <el-table-column label="过期时间" prop="expired_ts">
+      <el-table-column label="过期时间" prop="expire_ts">
         <template slot-scope="scope">
-          <span v-text="shortTime(scope.row.expired_ts)"></span>
+          <span v-text="shortTime(scope.row.expire_ts)"></span>
         </template>
       </el-table-column>
 

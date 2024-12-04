@@ -45,7 +45,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const qq = "INSERT INTO nodes (hostname, ip, req_count, active_ts, goroutine, version_info,sub_addresses) VALUES (?, ?, ?, ?, ?, ?, ?)"
     await db.prepare(qq).bind(body.hostname, clientIP, body.req_count, nowTs, body.goroutine, body.version_info, sub_addresses).run();
 
-    const qqq = "SELECT * FROM users WHERE expired_ts > ? AND available_kb > ?"
+    const qqq = "SELECT * FROM users WHERE expire_ts > ? AND available_kb > ?"
     const {results} = await db.prepare(qqq).bind(nowTs, 0).all<User>();
 
     const users: { [key: string]: number } = {}

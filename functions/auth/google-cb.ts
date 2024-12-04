@@ -50,16 +50,16 @@ export const onRequestGet: PagesFunction<Env> = async ({request, env}) => {
             id: crypto.randomUUID(),
             email: userEmail,
             available_kb:  1024 * 1024 * 5,
-            expired_ts: Math.floor(Date.now() / 1000) + 3600 * 24 * 90,
+            expire_ts: Math.floor(Date.now() / 1000) + 3600 * 24 * 90,
             active_ts: Math.floor(Date.now() / 1000),
         } as User;
-        const q = "INSERT INTO users (id,email, available_kb, expired_ts, active_ts) VALUES (?, ?, ?, ?, ?)"
-        await env.DB.prepare(q).bind(user.id, user.email, user.expired_ts, user.expired_ts, user.active_ts).run();
+        const q = "INSERT INTO users (id,email, available_kb, expire_ts, active_ts) VALUES (?, ?, ?, ?, ?)"
+        await env.DB.prepare(q).bind(user.id, user.email, user.available_kb, user.expire_ts, user.active_ts).run();
     }
     //write cookie
     const cookieValue = `id=${user.id}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`;
     const redirectUrl =`https://${request.headers.get("host")}/`;
-    return new Response(JSON.stringify(userInfo), {
+    return new Response(null, {
         status: 302,
         headers: {
             "Location": redirectUrl,
