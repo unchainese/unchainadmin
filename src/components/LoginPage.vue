@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     handleGoogleLogin() {
-      window.location.href = `${window.location.protocol}://${window.location.host}/auth/google`;
+      window.location.href = `${window.location.protocol}//${window.location.host}/auth/google`;
     },
   },
 };
