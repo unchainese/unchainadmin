@@ -41,8 +41,8 @@
           </el-tooltip>
 
 
-          <el-tooltip content="Mojotv.cn" placement="top">
-            <el-link :underline="false" class="addon-icon" href="https://mojotv.cn"
+          <el-tooltip content="unchainese.unchain" placement="top">
+            <el-link :underline="false" class="addon-icon" href="https://github.com/unchainese"
                      icon="el-icon-question" target="_blank"></el-link>
           </el-tooltip>
 
@@ -50,7 +50,7 @@
           <el-tooltip placement="top">
             <div slot="content">
               <p>ByteGang</p>
-              <p>前端GitHash：{{ gitHash }}</p>
+              <p>GitHash：{{ gitHash }}</p>
               <template v-for="(item,k) in version">
                 <p :key="k" v-text="item.desc + item.key"></p>
               </template>
@@ -70,29 +70,23 @@
 
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="sre-mfa-init"
-                                icon="el-icon-key">激活SRE-MFA
+                                icon="el-icon-key">Cool
               </el-dropdown-item>
 
 
-              <el-dropdown-item v-if="todoCount > 0" command="todo" icon="el-icon-s-promotion">
-                {{ `${todoCount}条待审批` }}
+              <el-dropdown-item  command="todo" icon="el-icon-s-promotion">
+                XY
               </el-dropdown-item>
-              <!--              <el-dropdown-item command="logout" icon="el-icon-s-operation">账号登出</el-dropdown-item>-->
-              <el-dropdown-item command="reset-password" icon="el-icon-guide">重置-密码
+                            <el-dropdown-item command="logout" icon="el-icon-s-operation">Logout</el-dropdown-item>
+
+                            <el-dropdown-item command="reset-pk" icon="el-icon-key">KEY</el-dropdown-item>
+                            <el-dropdown-item command="user-setting" icon="el-icon-setting">PubKey</el-dropdown-item>
+                            <el-dropdown-item command="user-mfa" icon="el-icon-s-grid">MFA</el-dropdown-item>
+
+              <el-dropdown-item  command="doc-api" icon="el-icon-s-grid" title="">
+                DOC
               </el-dropdown-item>
-              <el-dropdown-item command="reset-mfa" icon="el-icon-odometer">重置-MFA</el-dropdown-item>
-              <!--              <el-dropdown-item command="reset-pk" icon="el-icon-key">重置堡垒机SSH公钥</el-dropdown-item>-->
-              <!--              <el-dropdown-item command="user-setting" icon="el-icon-setting">设置公钥</el-dropdown-item>-->
-              <!--              <el-dropdown-item command="user-mfa" icon="el-icon-s-grid">设置2FA</el-dropdown-item>-->
-              <el-dropdown-item v-if="isAdmin" command="debug-log" icon="el-icon-s-grid" title="仅管理员可以看到">
-                系统日志
-              </el-dropdown-item>
-              <el-dropdown-item v-if="isAdmin" command="doc-api" icon="el-icon-s-grid" title="仅仅管理员可以看到">
-                API文档
-              </el-dropdown-item>
-              <el-dropdown-item v-if="isAdmin" command="jms-report" icon="el-icon-s-grid"
-                                title="仅仅管理员可以看到">报表预览
-              </el-dropdown-item>
+
             </el-dropdown-menu>
           </el-dropdown>
 
@@ -132,11 +126,12 @@ export default {
   computed: {
 
     oauthGithubURL() {
-      let clientId = '529233922d0f07904d7e';
-      let state = 'mojotv.cn';
-      let scope = 'user';
-      //https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#redirect-urls
-      return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${window.location.origin}&scope=${scope}&state=${state}`;
+      // let clientId = '529233922d0f07904d7e';
+      // let state = 'mojotv.cn';
+      // let scope = 'user';
+      // //https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#redirect-urls
+      // return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${window.location.origin}&scope=${scope}&state=${state}`;
+      return `/auth/google`;
 
     },
 

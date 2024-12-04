@@ -8,7 +8,14 @@ const vueRouter = new Router({
     mode: "hash",//history mode is not fit for netlify cloud
     routes: [
 
-
+        {
+            path: "/login",
+            name: "login",
+            meta: {
+                title: "Login"
+            },
+            component: () => import("./components/LoginPage"),
+        },
 
         {
             path: "/",
