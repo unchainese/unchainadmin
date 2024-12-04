@@ -1,5 +1,5 @@
-import {D1Database, PagesFunction, crypto} from "@cloudflare/workers-types";
-import {cfg, User} from "./tables";
+import {D1Database, PagesFunction} from "@cloudflare/workers-types";
+import {cfg, User} from "../tables";
 
 
 interface Env {

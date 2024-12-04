@@ -1,4 +1,5 @@
-import {D1Database,  PagesFunction} from "@cloudflare/workers-types";
+import {D1Database, PagesFunction} from "@cloudflare/workers-types";
+import {User} from "../tables";
 
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
@@ -9,8 +10,6 @@ interface Env {
     REDIRECT_URI: string;
     GOOGLE_CLIENT_SECRET: string;
 }
-
-
 
 
 export const onRequestGet: PagesFunction<Env> = async ({request, env}) => {
@@ -33,8 +32,35 @@ export const onRequestGet: PagesFunction<Env> = async ({request, env}) => {
         headers: {Authorization: `Bearer ${tokens.access_token}`},
     });
 
-    const userInfo = await userInfoResponse.json();
+    const userInfo: {
+        email: string,
+        email_verified: true,
+        picture: string,
+        sub: string
+    } = await userInfoResponse.json();
+
+    const user = await env.DB.prepare("SELECT * FROM users WHERE email = ?").bind(userInfo.email).first<User>();
+    if (!user) {
+        const uuid = crypto.randomUUID();
+        const kb = 1024 * 1024 * 5;
+        const expired_ts = Math.floor(Date.now() / 1000) + 3600 * 24 * 90;
+        const active_ts = Math.floor(Date.now() / 1000);
+        user.email = userInfo.email;
+        user.available_kb = kb;
+        user.expired_ts = expired_ts;
+        user.active_ts = active_ts;
+        const q = "INSERT INTO users (id,email, available_kb, expired_ts, active_ts) VALUES (?, ?, ?, ?, ?)"
+        await env.DB.prepare(q).bind(uuid, userInfo.email, kb, expired_ts, active_ts).run();
+    }
+    //write cookie
+    const cookieValue = `uuid=${user.id}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`;
+    const redirectUrl =`https://${request.headers.get("host")}/`;
     return new Response(JSON.stringify(userInfo), {
-        headers: {"Content-Type": "application/json"},
+        status: 302,
+        headers: {
+            "Location": redirectUrl,
+            "Set-Cookie": cookieValue,
+            "Content-Type": "application/json"
+        },
     });
 }
