@@ -44,18 +44,20 @@ export const onRequestGet: PagesFunction<Env> = async ({request, env}) => {
         console.error(userInfo);
         return new Response("email not found", {status: 400});
     }
-    const user = await env.DB.prepare("SELECT * FROM users WHERE email = ?").bind(userEmail).first<User>();
+    let user = await env.DB.prepare("SELECT * FROM users WHERE email = ?").bind(userEmail).first<User>();
     if (!user) {
-        user.id = crypto.randomUUID();
-        user.email = userEmail||"";
-        user.available_kb = 1024 * 1024 * 5;
-        user.expired_ts = Math.floor(Date.now() / 1000) + 3600 * 24 * 90;
-        user.active_ts = Math.floor(Date.now() / 1000);
+        user = {
+            id: crypto.randomUUID(),
+            email: userEmail,
+            available_kb:  1024 * 1024 * 5,
+            expired_ts: Math.floor(Date.now() / 1000) + 3600 * 24 * 90,
+            active_ts: Math.floor(Date.now() / 1000),
+        } as User;
         const q = "INSERT INTO users (id,email, available_kb, expired_ts, active_ts) VALUES (?, ?, ?, ?, ?)"
         await env.DB.prepare(q).bind(user.id, user.email, user.expired_ts, user.expired_ts, user.active_ts).run();
     }
     //write cookie
-    const cookieValue = `uuid=${user.id}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`;
+    const cookieValue = `id=${user.id}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`;
     const redirectUrl =`https://${request.headers.get("host")}/`;
     return new Response(JSON.stringify(userInfo), {
         status: 302,
