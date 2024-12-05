@@ -28,15 +28,15 @@ const vueRouter = new Router({
             redirect: {name: 'nodes'},
             children: [
 
-                // {
-                //     path: "orders",
-                //     name: "orders",
-                //     meta: {
-                //         breads: [{name: 'main', title: 'Home'}, {name: 'order', title: 'Order List'}],
-                //         title: "Orders"
-                //     },
-                //     component: () => import("./components/ListOrders")
-                // },
+                {
+                    path: "usages",
+                    name: "usages",
+                    meta: {
+                        breads: [{name: 'main', title: 'Home'}, {name: 'usage', title: 'Usage List'}],
+                        title: "Usages"
+                    },
+                    component: () => import("./components/ListUsages")
+                },
 
 
                 {
