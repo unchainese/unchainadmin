@@ -12,7 +12,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     const limit = parseInt(params.get("limit") || cfg.limit)
     const db = context.env.DB;
     const nowDate = new Date().toISOString().slice(0, 10);
-    const qq = "SELECT * FROM usages WHERE created_date < ? ORDER BY created_date DESC LIMIT ? OFFSET ?"
+    const qq = "SELECT * FROM usages WHERE created_date <= ? ORDER BY created_date DESC LIMIT ? OFFSET ?"
     const {results} = await db.prepare(qq).bind(nowDate, limit, offset).all<Usage>();
 
     return new Response(JSON.stringify(results), {
