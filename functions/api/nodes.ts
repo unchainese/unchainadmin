@@ -1,11 +1,9 @@
-import {D1Database, D1PreparedStatement, PagesFunction} from "@cloudflare/workers-types";
+import {D1PreparedStatement, PagesFunction} from "@cloudflare/workers-types";
 
-import {Node, User} from "../tables";
+import {Node, User, Env, cfg} from "../types";
 
 
-interface Env {
-    DB: D1Database;
-}
+
 
 interface AppStat {
     traffic: { [key: string]: number };//uuid -> KB number
@@ -21,8 +19,8 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     const token = context.request.headers.get("authorization") || '';
     const url = new URL(context.request.url);
     const params = url.searchParams;
-    const offset = parseInt(params.get("offset") || '0')
-    const limit = parseInt(params.get("limit") || '60')
+    const offset = parseInt(params.get("offset") || cfg.offset)
+    const limit = parseInt(params.get("limit") || cfg.limit)
     const db = context.env.DB;
     const nowTs = Math.floor(Date.now() / 1000) - 3600 * 24
     const qq = "SELECT * FROM nodes WHERE active_ts > ? ORDER BY active_ts DESC LIMIT ? OFFSET ?"

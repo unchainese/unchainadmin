@@ -1,11 +1,8 @@
-import {D1Database, PagesFunction} from "@cloudflare/workers-types";
-import {cfg, User} from "../tables";
+import {PagesFunction} from "@cloudflare/workers-types";
+import {cfg, User,Env} from "../types";
 
 
-interface Env {
-    DB: D1Database;
-    TOKEN: string;
-}
+
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
     const token = context.request.headers.get("authorization") || '';

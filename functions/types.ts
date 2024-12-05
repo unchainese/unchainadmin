@@ -1,3 +1,5 @@
+import {D1Database} from "@cloudflare/workers-types";
+
 export interface User {
     id: string
     email: string
@@ -23,10 +25,21 @@ export interface Usage {
     uid: string
     kb: number//KB
     created_date: string//eg 2024-09-28
+    category: string//eg 'raw','daily'
 }
 
 
 export const cfg = {
     limit: "120",
     offset: "0",
+}
+
+
+export interface Env {
+    DB: D1Database;
+    TOKEN: string;
+    GOOGLE_CLIENT_ID: string;
+    REDIRECT_URI: string;
+    GOOGLE_CLIENT_SECRET: string;
+
 }
