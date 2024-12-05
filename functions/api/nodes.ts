@@ -60,8 +60,12 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         if (u.available_kb < 0) {
             u.available_kb = 0
         }
-        const stmt = db.prepare("UPDATE users SET available_kb = ? WHERE id = ?").bind(u.available_kb, u.id)
-        stmtList.push(stmt)
+        const userKbUpdate = db.prepare("UPDATE users SET available_kb = ? WHERE id = ?").bind(u.available_kb, u.id)
+        const nowDate = new Date().toISOString().slice(0, 10);
+        const stmtUsageInsert = db.prepare("INSERT INTO usages (uid,kb,created_date,category) VALUES (?,?,?,?)").bind(u.id, usedKB, nowDate, 'raw')
+
+        stmtList.push(userKbUpdate)
+        stmtList.push(stmtUsageInsert)
         users[id] = u.available_kb
     }
 

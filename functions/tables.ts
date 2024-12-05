@@ -4,7 +4,7 @@ export interface User {
     available_kb: number
     expire_ts: number,
     active_ts: number,
-    role: string,//admin,'' for normal user
+    role: string,//admin,'user' for normal user
     sub_txt: string,//not a column in db, just for vless URL
 }
 
@@ -17,6 +17,14 @@ export interface Node {
     version_info: string,
     sub_addresses: string,// eg a.ex.com:90,b.ex.com:443,c.ex.com:8080
 }
+
+
+export interface Usage {
+    uid: string
+    kb: number//KB
+    created_date: string//eg 2024-09-28
+}
+
 
 export const cfg = {
     limit: "120",
