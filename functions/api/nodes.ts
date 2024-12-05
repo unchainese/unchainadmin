@@ -54,6 +54,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         if (usedKB < 0) {
             usedKB = 0
         }
+        if (!usedKB) continue;
         u.available_kb = u.available_kb - usedKB
         if (u.available_kb < 0) {
             u.available_kb = 0
