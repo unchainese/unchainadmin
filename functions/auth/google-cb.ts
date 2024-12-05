@@ -1,15 +1,10 @@
-import {D1Database, PagesFunction} from "@cloudflare/workers-types";
-import {User} from "../tables";
+import { PagesFunction} from "@cloudflare/workers-types";
+import {User,Env} from "../types";
 
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
 
-interface Env {
-    DB: D1Database;
-    GOOGLE_CLIENT_ID: string;
-    REDIRECT_URI: string;
-    GOOGLE_CLIENT_SECRET: string;
-}
+
 
 
 export const onRequestGet: PagesFunction<Env> = async ({request, env}) => {
