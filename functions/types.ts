@@ -1,4 +1,4 @@
-import {D1Database} from "@cloudflare/workers-types";
+import {D1Database,KVNamespace} from "@cloudflare/workers-types";
 
 export interface User {
     id: string
@@ -37,6 +37,7 @@ export const cfg = {
 
 export interface Env {
     DB: D1Database;
+    KV: KVNamespace;
     TOKEN: string;
     GOOGLE_CLIENT_ID: string;
     REDIRECT_URI: string;

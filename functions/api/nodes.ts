@@ -46,10 +46,12 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const qqq = "SELECT * FROM users WHERE expire_ts > ? AND available_kb > ?"
     const {results} = await db.prepare(qqq).bind(nowTs, 0).all<User>();
 
-    const users: { [key: string]: number } = {}
+    const allowUsers: { [key: string]: number } = {}
     const stmtList: D1PreparedStatement[] = []
+    const nowDate = new Date().toISOString().slice(0, 10);
     for (const u of results) {
         const id = u.id
+        allowUsers[id] = u.available_kb
         let usedKB = body.traffic[id] || 0;
         if (usedKB < 0) {
             usedKB = 0
@@ -59,17 +61,16 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         if (u.available_kb < 0) {
             u.available_kb = 0
         }
-        const userKbUpdate = db.prepare("UPDATE users SET available_kb = ? WHERE id = ?").bind(u.available_kb, u.id)
-        const nowDate = new Date().toISOString().slice(0, 10);
-        const stmtUsageInsert = db.prepare("INSERT INTO usages (uid,kb,created_date,category) VALUES (?,?,?,?)").bind(u.id, usedKB, nowDate, 'raw')
+        const userKbUpdate = db.prepare("UPDATE users SET available_kb = ? WHERE id = ?").bind(u.available_kb,id)
+        const stmtUsageInsert = db.prepare("INSERT INTO usages (uid,kb,created_date,category) VALUES (?,?,?,?)").bind(id, usedKB, nowDate, 'raw')
 
         stmtList.push(userKbUpdate)
         stmtList.push(stmtUsageInsert)
-        users[id] = u.available_kb
+        allowUsers[id] = u.available_kb
     }
 
     await db.batch(stmtList)
-    return new Response(JSON.stringify(users), {
+    return new Response(JSON.stringify(allowUsers), {
         headers: {"content-type": "application/json"},
     });
 };
