@@ -52,22 +52,22 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const nowDate = new Date().toISOString().slice(0, 10);
     for (const u of results) {
         const id = u.id
-        allowUsers[id] = u.available_kb
         let usedKB = body.traffic[id] || 0;
         if (usedKB < 0) {
             usedKB = 0
         }
-        if (!usedKB) continue;
         u.available_kb = u.available_kb - usedKB
         if (u.available_kb < 0) {
             u.available_kb = 0
+        }else{
+            allowUsers[id] = u.available_kb
         }
+        if (!usedKB) continue;
         const userKbUpdate = db.prepare("UPDATE users SET available_kb = ? WHERE id = ?").bind(u.available_kb,id)
         const stmtUsageInsert = db.prepare("INSERT INTO usages (uid,kb,created_date,category) VALUES (?,?,?,?)").bind(id, usedKB, nowDate, 'raw')
 
         stmtList.push(userKbUpdate)
         stmtList.push(stmtUsageInsert)
-        allowUsers[id] = u.available_kb
     }
 
     await db.batch(stmtList)
