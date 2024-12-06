@@ -40,6 +40,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     const clientIP = context.request.headers.get("cf-connecting-ip") || '';
     const sub_addresses = body.sub_addresses.join(",")
+    await db.prepare("DELETE FROM nodes WHERE ip = ?").bind(clientIP).run();
     const qq = "INSERT INTO nodes (hostname, ip, req_count, active_ts, goroutine, version_info,sub_addresses) VALUES (?, ?, ?, ?, ?, ?, ?)"
     await db.prepare(qq).bind(body.hostname, clientIP, body.req_count, nowTs, body.goroutine, body.version_info, sub_addresses).run();
 
