@@ -25,7 +25,7 @@ const vueRouter = new Router({
             },
 
             component: () => import("./components/Main"),
-            redirect: {name: 'nodes'},
+            redirect: {name: 'users'},
             children: [
 
                 {
