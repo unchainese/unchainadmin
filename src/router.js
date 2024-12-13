@@ -8,7 +8,14 @@ const vueRouter = new Router({
     mode: "hash",//history mode is not fit for netlify cloud
     routes: [
 
-
+        {
+            path: "/login",
+            name: "login",
+            meta: {
+                title: "Login"
+            },
+            component: () => import("./components/LoginPage"),
+        },
 
         {
             path: "/",
@@ -18,18 +25,18 @@ const vueRouter = new Router({
             },
 
             component: () => import("./components/Main"),
-            redirect: {name: 'nodes'},
+            redirect: {name: 'users'},
             children: [
 
-                // {
-                //     path: "orders",
-                //     name: "orders",
-                //     meta: {
-                //         breads: [{name: 'main', title: 'Home'}, {name: 'order', title: 'Order List'}],
-                //         title: "Orders"
-                //     },
-                //     component: () => import("./components/ListOrders")
-                // },
+                {
+                    path: "usages",
+                    name: "usages",
+                    meta: {
+                        breads: [{name: 'main', title: 'Home'}, {name: 'usage', title: 'Usage List'}],
+                        title: "Usages"
+                    },
+                    component: () => import("./components/ListUsages")
+                },
 
 
                 {

@@ -99,6 +99,7 @@ const menuUser = [
         subs: [
             {path: '/users', txt: 'Users', name: 'Users'},
             {path: '/nodes', txt: 'Nodes', name: 'Nodes'},
+            {path: '/usages', txt: 'Usages', name: 'Usages'},
         ]
     },
     // {

@@ -1,11 +1,8 @@
-import {D1Database, PagesFunction, crypto} from "@cloudflare/workers-types";
-import {cfg, User} from "./tables";
+import {PagesFunction} from "@cloudflare/workers-types";
+import {cfg, User,Env} from "../types";
 
 
-interface Env {
-    DB: D1Database;
-    TOKEN: string;
-}
+
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
     const token = context.request.headers.get("authorization") || '';
@@ -30,15 +27,16 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     // 	return new Response("Unauthorized", {status: 401})
     // }
     const body = await context.request.json<User>();
+    body.id = crypto.randomUUID();
     body.active_ts = Math.floor(Date.now() / 1000);
-    if (body.expired_ts < 3600) {
-        body.expired_ts = Math.floor(Date.now() / 1000) + 3600 * 24 * 30;
+    if (body.expire_ts < 3600) {
+        body.expire_ts = Math.floor(Date.now() / 1000) + 3600 * 24 * 30;
     }
     const db = context.env.DB;
 
     // language=SQL format=false
-    const q = `INSERT INTO users (id,email,password,available_kb,expired_ts,active_ts) VALUES (?,?,?,?,?,?)`
-    await db.prepare(q).bind(body.id, body.email, body.password, body.available_kb, body.expired_ts, body.active_ts).run();
+    const q = `INSERT INTO users (id,email,available_kb,expire_ts,active_ts) VALUES (?,?,?,?,?)`
+    await db.prepare(q).bind(body.id, body.email,  body.available_kb, body.expire_ts, body.active_ts).run();
     return new Response(JSON.stringify(body), {
         headers: {"content-type": "application/json"},
     });
@@ -52,14 +50,14 @@ export const onRequestPatch: PagesFunction<Env> = async (context) => {
     // }
     const body = await context.request.json<User>();
     body.active_ts = Math.floor(Date.now() / 1000);
-    if (body.expired_ts < 3600) {
-        body.expired_ts = Math.floor(Date.now() / 1000) + 3600 * 24 * 30;
+    if (body.expire_ts < 3600) {
+        body.expire_ts = Math.floor(Date.now() / 1000) + 3600 * 24 * 30;
     }
     const db = context.env.DB;
 
     // language=SQL format=false
-    const q = `UPDATE users SET email=?,password=?,available_kb=?,expired_ts=? WHERE id=?`
-    await db.prepare(q).bind(body.email, body.password, body.available_kb, body.expired_ts, body.id).run();
+    const q = `UPDATE users SET email=?,available_kb=?,expire_ts=? WHERE id=?`
+    await db.prepare(q).bind(body.email, body.available_kb, body.expire_ts, body.id).run();
     return new Response(JSON.stringify(body), {
         headers: {"content-type": "application/json"},
     });

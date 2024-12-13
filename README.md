@@ -44,11 +44,3 @@ wrangler pages dev
 wrangler pages deploy
 
 ```
-
-https://felixadmin.libragen.cn/#/user
-
-https://felixadmin.libragen.cn/api/users
-
-https://felixadmin.libragen.cn/api/nodes
-
-`

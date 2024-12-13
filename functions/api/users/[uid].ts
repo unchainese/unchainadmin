@@ -1,6 +1,6 @@
 import {D1Database, PagesFunction} from "@cloudflare/workers-types";
 
-import {Node, User} from "../tables";
+import {Node, User} from "../../types";
 
 
 interface Env {
