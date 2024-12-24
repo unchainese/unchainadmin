@@ -131,8 +131,25 @@ export default {
       // let scope = 'user';
       // //https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#redirect-urls
       // return `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${window.location.origin}&scope=${scope}&state=${state}`;
-      return `/auth/google`;
+      //return `/auth/google`;
+      
+      
+      
+      const GOOGLE_CLIENT_ID='800757779970-ogh0u2a80jpi0pdmehbc46poqi5oucpf.apps.googleusercontent.com';
+      const REDIRECT_URI='https://unchainadmin.pages.dev/api/oauth/google-cb';
+      GOOGLE_AUTH_URL ='https://accounts.google.com/o/oauth2/v2/auth'
 
+      const params = new URLSearchParams({
+          client_id: GOOGLE_CLIENT_ID,
+          redirect_uri: REDIRECT_URI,//https://unchainadmin.pages.dev/api/oauth/google-cb
+          response_type: "code",
+          scope: SCOPES,
+          access_type: "offline",
+          prompt: "consent",
+      });
+
+      const googleOAuthURL = `${GOOGLE_AUTH_URL}?${params.toString()}`
+      return googleOAuthURL;
     },
 
     version() {
