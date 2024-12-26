@@ -136,12 +136,12 @@ export default {
       
       
       const GOOGLE_CLIENT_ID='800757779970-ogh0u2a80jpi0pdmehbc46poqi5oucpf.apps.googleusercontent.com';
-      const REDIRECT_URI='https://unchainadmin.pages.dev/api/oauth/google-cb';
-      GOOGLE_AUTH_URL ='https://accounts.google.com/o/oauth2/v2/auth'
-
+      const REDIRECT_URI='https://unchain.libragen.cn/api/oauth/google-cb';
+      const GOOGLE_AUTH_URL ='https://accounts.google.com/o/oauth2/v2/auth'
+      const SCOPES='openid email'
       const params = new URLSearchParams({
           client_id: GOOGLE_CLIENT_ID,
-          redirect_uri: REDIRECT_URI,//https://unchainadmin.pages.dev/api/oauth/google-cb
+          redirect_uri: REDIRECT_URI,//https://unchain.libragen.cn/api/oauth/google-cb
           response_type: "code",
           scope: SCOPES,
           access_type: "offline",
