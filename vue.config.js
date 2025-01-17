@@ -4,7 +4,7 @@ module.exports = defineConfig({
     devServer: {
         proxy: {
             '/api': {
-                target: 'https://admin.unchainese.us.kg',
+                target: 'https://unchain.libragen.cn',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': 'api'

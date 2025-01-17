@@ -24,16 +24,9 @@
 
         <div class="header-addons">
 
-          <el-tooltip content="" placement="top">
 
-            <el-link :underline="false" class="addon-icon" icon="el-icon-orange"
-                     target="_blank"
-                     href="/#">
-            </el-link>
 
-          </el-tooltip>
-
-          <el-tooltip content="Oauth2-Github" placement="top">
+          <el-tooltip content="Oauth2-Google" placement="top">
             <el-link :underline="false" class="addon-icon" icon="el-icon-map-location"
                      target="_blank"
                      :href="oauthGithubURL">
@@ -44,18 +37,6 @@
           <el-tooltip content="unchainese.unchain" placement="top">
             <el-link :underline="false" class="addon-icon" href="https://github.com/unchainese"
                      icon="el-icon-question" target="_blank"></el-link>
-          </el-tooltip>
-
-
-          <el-tooltip placement="top">
-            <div slot="content">
-              <p>ByteGang</p>
-              <p>GitHash：{{ gitHash }}</p>
-              <template v-for="(item,k) in version">
-                <p :key="k" v-text="item.desc + item.key"></p>
-              </template>
-            </div>
-            <el-link :underline="false" class="addon-icon" icon="el-icon-warning"></el-link>
           </el-tooltip>
 
 
@@ -188,9 +169,7 @@ export default {
       this.$router.push({name: 'asset'})
       return
     }
-    // this.fetchGithubUser()
     //this.$store.dispatch("fetchMeta")
-
   },
 
   watch: {
@@ -199,44 +178,6 @@ export default {
     }
   },
   methods: {
-    async fetchGithubUser() {
-      if (this.user) {
-        return
-      }
-      let url = new URL(window.location.href);
-      let q = url.searchParams;
-      let code = q.get("code")
-      let state = q.get("state")
-      if (code && state) {
-        try {
-          this.loading = true
-          this.$message.info("start fetch github Oauth2 user info");
-          let user = await this.$http.get("/api/oauth/github", {params: {code, state}});
-          this.loading = false;
-
-          if (user) {
-            this.user = user;
-            this.$message.success("user has successful login");
-            setTimeout(() => {
-              window.location = window.location.origin
-            }, 1500)
-
-          } else {
-            this._oauthConfirm()
-          }
-
-        } catch (e) {
-          this.loading = false;
-          this.$message.error(e)
-        }
-
-      } else {
-        // location to Oauth Github page
-        window.location = this.oauthGithubURL
-      }
-    },
-
-
     _oauthConfirm() {
       this.$confirm('Github-Oauth2 Login failed', 'Do you want retry?', {
         confirmButtonText: 'Yes',

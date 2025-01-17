@@ -29,8 +29,7 @@
 
       <el-table-column label="GoRoutine" prop="goroutine" width="120">
       </el-table-column>
-      <el-table-column label="ReqCount" prop="req_count" width="120">
-      </el-table-column>
+
       <el-table-column label="version_info" prop="version_info"/>
       <el-table-column label="Sub" prop="sub_addresses"/>
 
