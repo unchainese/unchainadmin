@@ -30,10 +30,11 @@ npm run lint
 Vue2 + ElementUI is a good choice for me to build a project.
 I have used it for a long time. I have built a lot of projects with it.
 
-
+only frontend
 ```bash
 node v21.7.1
 npm v10.5.0
+
 ```
 
 
